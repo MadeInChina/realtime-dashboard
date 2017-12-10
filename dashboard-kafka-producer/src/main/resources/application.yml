@@ -1,0 +1,7 @@
+server:
+  port: 8080
+
+kafka:
+  producer:
+    bootstrap: 192.168.2.100:9092
+    topic: register-user-event
