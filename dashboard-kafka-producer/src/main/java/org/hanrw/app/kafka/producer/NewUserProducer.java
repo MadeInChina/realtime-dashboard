@@ -42,9 +42,7 @@ public class NewUserProducer {
 
     private void send(String topic, String userId) {
         try {
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-            Date dt = sf.parse(sf.format(new Date()));
-            NewUser newUser = new NewUser(userId, dt);
+            NewUser newUser = new NewUser(userId, new Date());
             SendResult<String, NewUser> sendResult = registerUserKafkaTemplate.send(topic, newUser).get();
             RecordMetadata recordMetadata = sendResult.getRecordMetadata();
             log.info("topic = {}, partition = {}, offset = {}, workUnit = {}",
