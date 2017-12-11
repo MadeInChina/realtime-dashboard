@@ -8,9 +8,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * IoT data event producer class which uses Kafka producer for events.
@@ -30,12 +32,19 @@ public class NewUserProducer {
     public void generateNewUsers(String topic) throws InterruptedException {
         List<String> users = Arrays.asList(new String[]{"1001", "1002", "1003"});
         // generate event in loop
-        users.stream().forEach(r -> send(topic, r));
+        Random rand = new Random();
+        log.info("Sending events");
+        while (true) {
+            users.stream().forEach(r -> send(topic, r));
+            Thread.sleep(rand.nextInt(3000 - 1000) + 1000);//random delay of 1 to 3 seconds
+        }
     }
 
     private void send(String topic, String userId) {
         try {
-            NewUser newUser = new NewUser(userId, new Date());
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = sf.parse(sf.format(new Date()));
+            NewUser newUser = new NewUser(userId, dt);
             SendResult<String, NewUser> sendResult = registerUserKafkaTemplate.send(topic, newUser).get();
             RecordMetadata recordMetadata = sendResult.getRecordMetadata();
             log.info("topic = {}, partition = {}, offset = {}, workUnit = {}",
