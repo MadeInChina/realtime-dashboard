@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+kafka:
+  consumer:
+    bootstrap: 192.168.2.100:9092
+    topic: register-user-event
+
+spark:
+  app_name: "demo"
+  master: "local[4]"
+  checkpoint: "/tmp/streaming-data"
+
+cassandra:
+  keyspace: dashboard
+  new_user_table: total_new_user
+  host: 127.0.0.1
+  port: 9042
+  keep_alive: 10000
+
