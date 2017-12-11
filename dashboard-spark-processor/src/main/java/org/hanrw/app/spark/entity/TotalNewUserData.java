@@ -15,6 +15,4 @@ import java.io.Serializable;
 public class TotalNewUserData implements Serializable {
     private long totalCount;
     private String createdTime;
-    private String recordTime;
-
 }
