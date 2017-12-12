@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+cassandra:
+  keyspace: dashboard
+  new_user_table: new_user_counts
+  host: "127.0.0.1"
+  port: "9042"
+  keep_alive: "10000"
