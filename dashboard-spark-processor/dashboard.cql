@@ -8,6 +8,18 @@ CREATE TABLE dashboard.new_user_counts
   PRIMARY KEY (created_time)
 );
 
+CREATE TABLE dashboard.deposit_amount
+  (user_id text,
+  amounts text,
+  created_time text,
+  PRIMARY KEY (created_time)
+);
+
+CREATE TABLE dashboard.deposit_amount
+  (id UUID , product INT, amount DECIMAL,
+   PRIMARY KEY id
+);
+
 //Select from table
 SELECT * FROM dashboard.new_user_counts;
 

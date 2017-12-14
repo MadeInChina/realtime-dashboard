@@ -1,10 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.iot.app.kafka</groupId>
-    <artifactId>iot-kafka-producer</artifactId>
-    <version>1.0.0</version>
-    <name>IoT Kafka Producer</name>
+    <artifactId>dashboard-kafka-producer</artifactId>
     <parent>
         <groupId>org.hanrw.dashboard.app</groupId>
         <artifactId>dashboard</artifactId>
