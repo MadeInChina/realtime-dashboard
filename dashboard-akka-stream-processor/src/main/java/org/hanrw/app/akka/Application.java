@@ -1,11 +1,14 @@
 package org.hanrw.app.akka;
 
+import akka.Done;
 import akka.actor.ActorSystem;
 import akka.kafka.ConsumerSettings;
 import akka.kafka.Subscriptions;
 import akka.kafka.javadsl.Consumer;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Sink;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.hanrw.app.akka.config.CassandraProperties;
@@ -39,13 +42,18 @@ public class Application implements ApplicationRunner {
             .withGroupId("group1")
             .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
+    //Refers to https://doc.akka.io/docs/akka-stream-kafka/current/consumer.html
+    //This is useful when “at-least once delivery” is desired
     Consumer.committableSource(consumerSettings, Subscriptions.topics(kafkaProperties.getTopic()))
-        .map(msg -> {
-          System.out.println(msg);
-          return msg;
-        })
+        .mapAsync(1, msg -> update(msg.record().value())
+                                .thenApply(done -> msg))
+        .mapAsync(1, msg -> msg.committableOffset().commitJavadsl())
         .runWith(Sink.ignore(), materializer);
   }
 
+  public CompletionStage<Done> update(String data) {
+    System.out.println("DB.update: " + data);
+    return CompletableFuture.completedFuture(Done.getInstance());
+  }
 }
 
