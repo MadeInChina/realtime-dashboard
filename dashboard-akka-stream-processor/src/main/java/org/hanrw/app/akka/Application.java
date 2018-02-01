@@ -2,6 +2,7 @@ package org.hanrw.app.akka;
 
 import akka.Done;
 import akka.actor.ActorSystem;
+import akka.kafka.ConsumerMessage.CommittableMessage;
 import akka.kafka.ConsumerSettings;
 import akka.kafka.Subscriptions;
 import akka.kafka.javadsl.Consumer;
@@ -45,13 +46,13 @@ public class Application implements ApplicationRunner {
     //Refers to https://doc.akka.io/docs/akka-stream-kafka/current/consumer.html
     //This is useful when “at-least once delivery” is desired
     Consumer.committableSource(consumerSettings, Subscriptions.topics(kafkaProperties.getTopic()))
-        .mapAsync(1, msg -> update(msg.record().value())
+        .mapAsync(1, msg -> update(msg)
                                 .thenApply(done -> msg))
         .mapAsync(1, msg -> msg.committableOffset().commitJavadsl())
         .runWith(Sink.ignore(), materializer);
   }
 
-  public CompletionStage<Done> update(String data) {
+  public CompletionStage<Done> update(CommittableMessage data) {
     System.out.println("DB.update: " + data);
     return CompletableFuture.completedFuture(Done.getInstance());
   }
